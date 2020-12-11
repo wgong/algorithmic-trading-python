@@ -2,8 +2,10 @@ algorithmic-trading/
 .ipynb_checkpoints/
 sp_500_stocks.csv
 **/secrets.py
+.iex_cloud_api_token.json
 .DS_Store
 __pycache__
 **/recommended_trades.xlsx
 **/momentum_strategy.xlsx
 venv/
+

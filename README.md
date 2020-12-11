@@ -1,5 +1,9 @@
 # Algorithmic Trading in Python
 
+
+[Algorithmic Trading Using Python - Full Course](https://www.youtube.com/watch?v=xfzGZB4HhEE) 
+developed by [Nick McCullum](https://nickmccullum.com/)
+
 This repository
 
 ## Course Outline
@@ -32,3 +36,10 @@ This repository
   * Calculating Weights
   * Generating Our Output File
   * Additional Project Ideas
+
+
+## IEX Cloud
+
+https://iexcloud.io/
+
+25% off annual plan  (CLOUDHOLIDAY2020)
