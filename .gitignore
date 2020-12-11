@@ -1,7 +1,7 @@
 algorithmic-trading/
 .ipynb_checkpoints/
 sp_500_stocks.csv
-**/secrets.py
+**/secrets.*
 .iex_cloud_api_token.json
 .DS_Store
 __pycache__

@@ -43,3 +43,17 @@ This repository
 https://iexcloud.io/
 
 25% off annual plan  (CLOUDHOLIDAY2020)
+
+## Issues
+
+### pip install XlsxWriter not working on Ubuntu
+
+with pip install, `import xlsxwriter` failed, solution is to install from source
+
+```
+$ git clone https://github.com/jmcnamara/XlsxWriter.git
+$ cd XlsxWriter
+$ python setup.py install
+```
+
+Not really, it has something to do with vscode Integrated terminal.
