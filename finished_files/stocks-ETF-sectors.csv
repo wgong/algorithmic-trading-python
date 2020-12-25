@@ -1,0 +1,18 @@
+Ticker, Name, Sector_File, TopN, WRITE_ALL
+SPY, S&P 500 Index, stocks-SP500.csv, 10, 0
+QQQ, Nasdaq 100, stocks-NASDAQ100.csv, 10, 1
+DIA, Dow 30, stocks-DOW30.csv, 5, 1
+IWM, Russell 2000, stocks-RUSSELL2000.csv, 20, 0
+GDX, Gold miner, sector-GOLD-miner.csv, 5, 1
+SIL, Silver miner, sector-SILVER-miner.csv, 5, 1
+XLC, Communication Services, sector-communication-services.csv, 10, 0
+XLY, Consumer Discretionary, sector-consumer-cyclical.csv, 10, 0
+XLP, Consumer Staples, sector-consumer-defensive.csv, 10, 0
+XLE, Energy, sector-energy.csv, 10, 0
+XLF, Financials, sector-financial-services.csv, 10, 0
+XLV, Health Care, sector-healthcare.csv, 20, 0
+XLI, Industrials, sector-industrials.csv, 10, 0
+XLB, Materials, sector-basic-materials.csv, 10, 0
+XLK, Technology, sector-technology.csv, 20, 0
+XLU, Utilities, sector-utilities.csv, 5, 0
+XLRE, Real Estate, sector-real-estate.csv, 5, 0

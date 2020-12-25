@@ -1,0 +1,31 @@
+Ticker,Name,Index Weight,Last,Change,% Change
+EQR, Equity Residential,2.65%,57.07,+1.13,+1.98%
+WELL,    Welltower Inc,3.52%,62.36,+1.16,+1.86%
+MAA, Mid-America Apt Communties,1.89%,122.66,+1.94,+1.58%
+DRE, Duke Realty Corp,1.94%,38.74,+0.56,+1.45%
+BXP, Boston Properties Inc,1.77%,92.60,+1.33,+1.44%
+EXR, Extra Space Storage Inc,1.96%,112.83,+1.56,+1.38%
+ESS, Essex Property Trust,2.03%,231.24,+3.01,+1.30%
+HST, Host Hotels & Resorts Inc,1.33%,14.04,+0.16,+1.14%
+AMT, American Tower Corp A,12.90%,216.19,+2.46,+1.14%
+PLD, ProLogis Inc,9.54%,96.19,+1.05,+1.09%
+O,   Realty Income Corp,2.85%,60.46,+0.63,+1.04%
+CCI, Crown Castle Intl Corp,8.82%,152.46,+1.54,+1.01%
+KIM, Kimco Realty Corp,0.83%,14.39,+0.13,+0.90%
+SPG, Simon Property Group A,3.67%,83.65,+0.72,+0.86%
+PSA, Public Storage,4.62%,227.00,+1.85,+0.82%
+PEAK,    Healthpeak Properties Inc.,2.13%,29.52,+0.24,+0.81%
+UDR, UDR Inc,1.46%,37.03,+0.29,+0.78%
+SBAC,    SBA Communications Corp,4.06%,272.98,+2.04,+0.75%
+WY,  Weyerhaeuser Co,3.35%,33.61,+0.24,+0.71%
+AVB, AvalonBay Communities Inc,2.92%,156.72,+1.02,+0.65%
+REG, Regency Centers Corp,0.95%,45.16,+0.25,+0.55%
+FRT, Federal Realty Invt Trust,0.79%,86.11,+0.47,+0.55%
+DLR, Digital Realty Trust,5.11%,136.79,+0.64,+0.47%
+ARE, Alexandria Real Estate Eqty,2.87%,173.69,+0.81,+0.47%
+VTR, Ventas Inc,2.45%,48.99,+0.20,+0.41%
+EQIX,    Equinix Inc,8.35%,703.08,+2.86,+0.41%
+CBRE,    CBRE Group Inc.,2.80%,62.75,+0.18,+0.29%
+IRM, Iron Mountain Inc,1.13%,29.47,+0.07,+0.24%
+SLG, SL Green Realty Corp,0.55%,56.71,+0.03,+0.05%
+VNO, Vornado Realty Trust,0.75%,36.47,-0.32,-0.88%

@@ -7,4 +7,5 @@ __pycache__
 **/recommended_trades.xlsx
 **/momentum_strategy.xlsx
 venv/
+mom101/
 
