@@ -41,9 +41,15 @@ def momentum_rank(file_csv, TOP_N=100, WRITE_ALL_DF=False):
 
     # prepare output file-names
     today = datetime.datetime.now()
-    xlsx_file = f"spreadsheet_{filename}_top{TOP_N}_{today.strftime('%Y-%m-%d')}.xlsx"
-    xlsx_file_all = f"spreadsheet_{filename}_all_{today.strftime('%Y-%m-%d')}.xlsx"
-    watchlist_file = f"watchlist_{filename}_top{TOP_N}_{today.strftime('%Y-%m-%d')}.csv"
+    today_str = today.strftime('%Y-%m-%d')
+    pardir = os.path.dirname(__file__)
+    scan_dir = os.path.join(pardir, "scan", today_str)
+    if not os.path.exists(scan_dir):
+        os.mkdir(scan_dir)
+
+    xlsx_file = os.path.join(scan_dir, f"spreadsheet_{filename}_top{TOP_N}.xlsx")
+    xlsx_file_all = os.path.join(scan_dir, f"spreadsheet_{filename}_all.xlsx")
+    watchlist_file = os.path.join(scan_dir, f"watchlist_{filename}_top{TOP_N}.csv")
 
     time_periods = [
         'Five-Day',

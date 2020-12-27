@@ -8,4 +8,5 @@ __pycache__
 **/momentum_strategy.xlsx
 venv/
 mom101/
+**/*.pkl
 
