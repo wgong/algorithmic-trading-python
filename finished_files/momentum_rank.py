@@ -17,6 +17,7 @@ from statistics import mean
 
 import datetime
 import sys
+import os
 
 import api_token  as gwg # handle iexcloud API tokens
 
@@ -246,7 +247,7 @@ def momentum_rank(file_csv, TOP_N=100, WRITE_ALL_DF=False):
 
 
     # ### save watchlist
-    tickers = hqm_df[['Ticker']]
+    tickers = hqm_df[['Ticker','HQM Score']]
     tickers.to_csv(watchlist_file, index=False)
 
     return watchlist_file

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# coding: utf-8
+
 import os.path
 import json
 token_path = os.path.expanduser("~/.api_tokens/.iex_cloud_config.json")
@@ -27,6 +30,7 @@ def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]   
+
 
 def read_ticker(file_csv):
     """Read tickers from a CSV or text file,

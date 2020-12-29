@@ -116,14 +116,18 @@ def get_sector_profiles(symbols, connection):
 
         if prof_data:
             sector,industry,website, profile, num_emp = \
-                prof_data["sector"], prof_data["industry"], prof_data["website"], prof_data["longBusinessSummary"], prof_data["fullTimeEmployees"]
+                prof_data.get("sector", "N/A"), \
+                prof_data.get("industry", "N/A"), \
+                prof_data.get("website", "N/A"), \
+                prof_data.get("longBusinessSummary", "N/A"),\
+                prof_data.get("fullTimeEmployees", 0)
 
             print(f"sector={sector}")
             if profile or sector:
                 try:
                     insert_query = f""" 
                         INSERT INTO ticker (symbol,sector,industry,website,num_emp,profile) 
-                        VALUES ('{symbol}', '{sector}', '{industry}','{website}', num_emp, '{profile}')
+                        VALUES ('{symbol}', '{sector}', '{industry}','{website}', {num_emp}, '{profile}')
                         ;
                     """    
                     cursor.execute(insert_query)
@@ -255,6 +259,9 @@ def generate_html(file_csv, file_png, i):
         None    
     """
     global fa_results
+    global df_symbol, fa_dict
+
+
 
     if i:
         html_mode = "a"
@@ -264,7 +271,7 @@ def generate_html(file_csv, file_png, i):
     filename, _ = os.path.splitext(os.path.basename(file_csv))
     file_html = os.path.join(root_dir, "research", f"{filename}.html")
     with open(file_html, html_mode) as f:
-        # have a summary table at the top
+        # create a summary table at the top
         if i == 0:
             table_str = f"""
             <h3><a name=summary>Summary</a></h3>
@@ -275,23 +282,33 @@ def generate_html(file_csv, file_png, i):
                 <th>Industry</th>
                 <th>URL</th>
                 <th>#Employees</th>
+                <th>Score</th>
                 </tr>
             """
-            for item in fa_results:
-                symbol,sector,industry,website,num_emp,profile = item
+            for idx in df_symbol.index:
+                symbol = df_symbol.loc[idx, "Ticker"]
+                score  = df_symbol.loc[idx, "HQM Score"]
+
+                symbol,sector,industry,website,num_emp,profile = \
+                    fa_dict.get(symbol, [symbol,"N/A","N/A","N/A",0,"N/A"])
+
                 table_str += f"""
                     <tr><td><a href="#{symbol}">{symbol}</a></td>
                         <td>{sector}</td>
                         <td>{industry}</td>
                         <td><a href={website}>{website}</a></td>
                         <td>{num_emp}</td>
+                        <td>{score:.1f}</td>
                         </tr>
                 """
 
             table_str += "</table>"
             f.write(table_str)
 
-        symbol,sector,industry,website,num_emp,profile = fa_results[i]
+        symbol = df_symbol.loc[i, "Ticker"]
+        symbol,sector,industry,website,num_emp,profile = \
+            fa_dict.get(symbol, [symbol,"N/A","N/A","N/A",0,"N/A"])
+
         html_str = f"""
             <h3><a name="{symbol}" href="https://finviz.com/quote.ashx?t={symbol}">{symbol}</a> </h3>
             <table>
@@ -299,24 +316,34 @@ def generate_html(file_csv, file_png, i):
         """
         if sector:
             html_str += f"""
-                <tr><td> <b>URL:  </b> <a href={website}> {website}</a> - <b>Sector: </b>{sector} - <b>Industry: </b> {industry} - <b>Employes: </b> {num_emp}  <a href=#summary> -> Summary</a> </td></tr>
+                <tr><td> <b>URL:  </b> <a href={website}> {website}</a> - <b>Sector: </b>{sector} - <b>Industry: </b> {industry} - <b>Employes: </b> {num_emp}   </td></tr>
                 <tr><td> <b>Profile: </b> {profile}  </td></tr>
             """
-        html_str += "</table>"
+        html_str += "</table>  <a href=#summary> [Summary] </a>"
         f.write(html_str)
 
 if __name__ == "__main__":
     try:
         if len(sys.argv) > 1:
             for file_csv in sys.argv[1:]:
-                # symbols = pd.read_csv(file_csv)["Ticker"].tolist()
-                symbols = gwg.read_ticker(file_csv)
+                try:
+                    df_symbol = pd.read_csv(file_csv)[['Ticker','HQM Score']]
+                except:
+                    df_symbol = pd.DataFrame(gwg.read_ticker(file_csv), columns=['Ticker'])
+                    df_symbol["HQM Score"] = 0
 
+                symbols = df_symbol['Ticker'].tolist()
+                num_symbols = len(symbols)
+
+                fa_dict = {}
                 fa_results = get_sector_profiles(symbols, connection)
-                num_symbols = len(fa_results)
+                for row in fa_results:
+                    fa_dict[row[0]] = row
 
-                for i, fa_info in enumerate(fa_results):
+                for i in df_symbol.index:
                     print(f"\n==========   {i+1} / {num_symbols}   =========================\n")
+                    symbol = df_symbol.loc[i, "Ticker"]
+                    fa_info = fa_dict.get(symbol, [symbol,"N/A","N/A","N/A",0,"N/A"])
                     po, file_png = plt_chart(fa_info, save_chart=True, interactive=False)
 
                     if file_png:
