@@ -24,6 +24,9 @@ import finplot as fplt
 import db_params
 import api_token as gwg
 
+global fa_results
+
+
 NUM_OF_MONTHS = 18
 MA_FAST = 15
 MA_SLOW = 50
@@ -230,43 +233,74 @@ def plt_chart(fa_info, save_chart=False, interactive=False):
     fplt.volume_ocv(df[['Date','Open','Close','Volume']], ax=ax2)
     fplt.plot(df.Volume.ewm(span=20).mean(), ax=ax2, color=1)
 
-    if interactive:
-        fplt.set_time_inspector(update_legend_text, ax=ax, when='hover')
-        fplt.add_crosshair_info(update_crosshair_text, ax=ax)
+    # if interactive:
+    #     fplt.set_time_inspector(update_legend_text, ax=ax, when='hover')
+    #     fplt.add_crosshair_info(update_crosshair_text, ax=ax)
 
     if save_chart:
         fplt.timer_callback(save, 0.5, single_shot=True) # wait some until we're rendered
 
-    chart_info = [symbol,file_png,sector,industry,website,profile, num_emp]
     # print(chart_info)
-    return_result = (fplt, chart_info)
+    return_result = (fplt, file_png)
     return return_result
 
-def generate_html(file_csv, chart_info):
+def generate_html(file_csv, file_png, i):  
     """generate a html file in $MOM101_HOME/research folder
 
     Args:
         file_csv - watchlist filename
-        chart_info - 
-            [symbol,file_png,sector,industry,website,profile, num_emp]
+        file_png - 
 
     Return:
         None    
     """
+    global fa_results
+
+    if i:
+        html_mode = "a"
+    else:
+        html_mode = "w"
     root_dir = os.environ['MOM101_HOME']
     filename, _ = os.path.splitext(os.path.basename(file_csv))
     file_html = os.path.join(root_dir, "research", f"{filename}.html")
-    with open(file_html, "a") as f:
-        symbol,file_png,sector,industry,website,profile, num_emp = chart_info
+    with open(file_html, html_mode) as f:
+        # have a summary table at the top
+        if i == 0:
+            table_str = f"""
+            <h3><a name=summary>Summary</a></h3>
+
+            <table border="ipx">
+            <tr><th>Symbol</th>
+                <th>Sector</th>
+                <th>Industry</th>
+                <th>URL</th>
+                <th>#Employees</th>
+                </tr>
+            """
+            for item in fa_results:
+                symbol,sector,industry,website,num_emp,profile = item
+                table_str += f"""
+                    <tr><td><a href="#{symbol}">{symbol}</a></td>
+                        <td>{sector}</td>
+                        <td>{industry}</td>
+                        <td><a href={website}>{website}</a></td>
+                        <td>{num_emp}</td>
+                        </tr>
+                """
+
+            table_str += "</table>"
+            f.write(table_str)
+
+        symbol,sector,industry,website,num_emp,profile = fa_results[i]
         html_str = f"""
-            <h3>{symbol} </h3>
+            <h3><a name="{symbol}" href="https://finviz.com/quote.ashx?t={symbol}">{symbol}</a> </h3>
             <table>
             <tr><td> <img src={file_png} width=1200> </td></tr>
         """
         if sector:
             html_str += f"""
-                <tr><td> <b>URL:  </b> <a href={website}> {website}</a> - <b>Sector: </b>{sector} - <b>Industry: </b> {industry} - <b>Employes: </b> {num_emp}</td></tr>
-                <tr><td> <b>Profile: </b> {profile} </td></tr>
+                <tr><td> <b>URL:  </b> <a href={website}> {website}</a> - <b>Sector: </b>{sector} - <b>Industry: </b> {industry} - <b>Employes: </b> {num_emp}  <a href=#summary> -> Summary</a> </td></tr>
+                <tr><td> <b>Profile: </b> {profile}  </td></tr>
             """
         html_str += "</table>"
         f.write(html_str)
@@ -283,10 +317,10 @@ if __name__ == "__main__":
 
                 for i, fa_info in enumerate(fa_results):
                     print(f"\n==========   {i+1} / {num_symbols}   =========================\n")
-                    po, chart_info = plt_chart(fa_info, save_chart=True, interactive=False)
+                    po, file_png = plt_chart(fa_info, save_chart=True, interactive=False)
 
-                    if chart_info:
-                        generate_html(file_csv, chart_info)
+                    if file_png:
+                        generate_html(file_csv, file_png, i)
 
                     if po:
                         po.show()
