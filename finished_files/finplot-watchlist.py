@@ -35,6 +35,7 @@ MACD_FAST = 12
 MACD_SLOW = 26
 MACD_AVG  = 9
 MACD_FACTOR = 3
+TREND_FACTOR = 0.4
 
 db_kwargs = db_params.get_db_params(
         db_name="gwgdb", 
@@ -47,6 +48,13 @@ connection = psycopg2.connect(**db_kwargs)
 TABLE_NAME = "ticker"
 
 today_str = datetime.datetime.now().strftime('%Y-%m-%d')
+
+color_names = "blue       orange     green      red        purple     brown        pink     black      yellow    light-blue"
+colors = [c.strip() for c in color_names.split(" ") if c.strip()]
+COLOR_IDX = {}
+for i,c in enumerate(colors):
+    COLOR_IDX[c] = i
+
 
 def keyboardInterruptHandler(signal, frame):
     print("KeyboardInterrupt (ID: {}) has been caught. Quit...".format(signal))
@@ -210,19 +218,22 @@ def plt_chart(fa_info, save_chart=False, interactive=False):
     ma15=df.Close.ewm(span=MA_FAST).mean()
     ma50=df.Close.ewm(span=MA_SLOW).mean()
     ma200=df.Close.ewm(span=MA_LONG).mean()
-    fplt.plot(ma15, ax=ax)
-    fplt.plot(ma50, ax=ax)
-    fplt.plot(ma200, ax=ax)
+    fplt.plot(ma15, ax=ax, color=COLOR_IDX["blue"], width=1)
+    fplt.plot(ma50, ax=ax, color=COLOR_IDX["red"], width=2)
+    fplt.plot(ma200, ax=ax, color=COLOR_IDX["green"], width=3)
 
     # plot macd with standard colors first
-    macd = df.Close.ewm(span=MACD_FAST).mean() - df.Close.ewm(span=MACD_SLOW).mean()
+    macd = ma15-ma50
     signal = macd.ewm(span=MACD_AVG).mean()
+    trend = TREND_FACTOR*(ma50-ma200)
     df['macd_diff'] = MACD_FACTOR*(macd - signal)
+
     fplt.volume_ocv(df[['Date','Open','Close','macd_diff']], ax=ax1, colorfunc=fplt.strength_colorfilter)
     fplt.plot(macd, ax=ax1)
     # fplt.plot(signal, ax=ax1, legend='Signal')
-    fplt.plot(macd, ax=ax1)
-    fplt.plot(signal, ax=ax1)
+    fplt.plot(macd, ax=ax1, width=COLOR_IDX["red"])
+    fplt.plot(signal, ax=ax1, color=COLOR_IDX["black"])
+    fplt.plot(trend, ax=ax1, width=2, color=COLOR_IDX["blue"])
 
     # # change to b/w coloring templates for next plots
     # fplt.candle_bull_color = fplt.candle_bear_color = '#000'
@@ -235,7 +246,7 @@ def plt_chart(fa_info, save_chart=False, interactive=False):
     vol_factor = 100000
     df['Volume'] = df['Volume']/vol_factor
     fplt.volume_ocv(df[['Date','Open','Close','Volume']], ax=ax2)
-    fplt.plot(df.Volume.ewm(span=20).mean(), ax=ax2, color=1)
+    fplt.plot(df.Volume.ewm(span=20).mean(), ax=ax2, color=COLOR_IDX["black"], width=2)
 
     # if interactive:
     #     fplt.set_time_inspector(update_legend_text, ax=ax, when='hover')
